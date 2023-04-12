@@ -2,7 +2,7 @@ import mediapipe as mp
 import cv2
 import numpy as np
 import math
-from pynput.keyboard import Key, Controller
+from pynput.keyboard import Controller
 from math import acos, degrees
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
