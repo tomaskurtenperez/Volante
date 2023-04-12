@@ -1,0 +1,1 @@
+Programa creado por Tomás Kürten Pérez con Mediapipe para manejar videojuegos de autos
