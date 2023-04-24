@@ -16,22 +16,6 @@ def detectsig(thickness):
      resultado=" "
      if thickness == [2, -1, 2, 2, 2]:
           resultado="UNO"
-     if thickness == [2, -1, -1, 2, 2]:
-          resultado="DOS"
-     if thickness == [-1, -1, -1, 2, 2]:
-          resultado="TRES"
-     if thickness == [2, -1, -1, -1, -1]:
-          resultado="CUATRO"
-     if thickness == [-1, -1, -1, -1, -1]:
-          resultado="CINCO"
-     if thickness == [2, -1, -1, -1, 2]:
-          resultado="SEIS"
-     if thickness == [2, -1, -1, 2, -1]:
-          resultado="SIETE"
-     if thickness == [2, -1, 2, -1, -1]:
-          resultado="OCHO"
-     if thickness == [2, 2, -1, -1, -1]:
-          resultado="NUEVE"
      if thickness == [-1, 2, 2, 2, 2]:
           resultado="DIEZ"
      if thickness == [-1, -1, 2, 2, 2]:
@@ -42,7 +26,6 @@ def angle_of_singleline(rx,ry,lx,ly):
     x_diff = lx - rx
     y_diff = ly - ry
     return math.degrees(math.atan2(-y_diff, x_diff))
-
 
 def palm_centroid(coordinates_list):
      coordinates = np.array(coordinates_list)
@@ -73,7 +56,6 @@ mp_hands.HandLandmark.WRIST
 
 cap = cv2.VideoCapture(0)
 
-
 # Pulgar
 thumb_points = [1, 2, 4]
 
@@ -81,7 +63,6 @@ thumb_points = [1, 2, 4]
 palm_points = [0, 1, 2, 5, 9, 13, 17]
 fingertips_points = [8, 12, 16, 20]
 finger_base_points =[6, 10, 14, 18]
-
 
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) as hands:
     while cap.isOpened():
@@ -167,8 +148,6 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                         keyboard.release('x')
                         nx, ny = palm_centroid(coordinates_palm)
                         coordinates_centroid = np.array([nx, ny])
-                        # coordinates_ft = np.array(coordinates_ft)
-                        # coordinates_fb = np.array(coordinates_fb)
                         
                         # Distancias
                         d_centrid_ft = np.linalg.norm(coordinates_centroid - coordinates_ft, axis=1)
@@ -180,7 +159,6 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                         for (i, finger) in enumerate(fingers):
                                 if finger == True:
                                     thickness[i] = -1
-                            
                         
                 result=detectsig(thickness)
                 if result=="DIEZ" or result=="ONCE":
@@ -191,7 +169,6 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                     keyboard.press('t')
                 else:
                     keyboard.release('t')
-                    
 
                 ang=angle_of_singleline(lx,ly,rx,ry)
                 if ang>90:
@@ -202,21 +179,15 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                         last='a'
                         keyboard.release('d')
                         keyboard.press('a')
-                        # print("left",ang)
                 elif ang<-30:
                         last='d'
                         keyboard.release('a')
                         keyboard.press('d')
-                        # print("right",ang)
                 else:
                     keyboard.release('d')
                     keyboard.release('a')
-                    # print(ang)
-
 
         cv2.imshow('Hand Tracking', image)
-        #rx,ry,lx,ly=[0,0,0,0]
-
 
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
