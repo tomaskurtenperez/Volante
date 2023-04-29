@@ -11,7 +11,7 @@ mp_hands = mp.solutions.hands
 rx,ry,lx,ly=[0,0,0,0]
 keyboard = Controller()
 thumb_points = [1, 2, 4]
-
+font = cv2.FONT_HERSHEY_SIMPLEX
 def detectsig(thickness):
      resultado=" "
      if thickness == [2, -1, 2, 2, 2]:
@@ -99,7 +99,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                 if get_label(num, hand, results):
                     text, coord = get_label(num, hand, results)
                    
-                    cv2.putText(image, text, coord, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                    #cv2.putText(image, text, coord, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
                    
                     if text=="Right":
                         h, w, c = image.shape
@@ -159,14 +159,22 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                         for (i, finger) in enumerate(fingers):
                                 if finger == True:
                                     thickness[i] = -1
-                        
+
+                radius=int(math.dist((rx,ry), (lx,ly))//2)
+                cenx=int(abs(rx-lx)//2)
+                ceny=int(abs(ry-ly)//2)
+                cenx=min([rx,lx])+cenx
+                ceny=min([ry,ly])+ceny
+                cv2.circle(image, (cenx,ceny), radius, (0, 0, 0), 20)     
                 result=detectsig(thickness)
                 if result=="DIEZ" or result=="ONCE":
                         keyboard.press('x')
+                        cv2.putText(image, 'X', (50,100), font, 1, (0,0,0), 3, cv2.LINE_AA)
                 else:
                     keyboard.release('x')
                 if result=="UNO" or result=="ONCE":
                     keyboard.press('t')
+                    cv2.putText(image, 'T', (50,150), font, 1, (0,0,0), 3, cv2.LINE_AA)
                 else:
                     keyboard.release('t')
 
@@ -179,10 +187,13 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                         last='a'
                         keyboard.release('d')
                         keyboard.press('a')
+                        cv2.putText(image, 'LEFT', (50,50), font, 1, (0,0,0), 3, cv2.LINE_AA)
+
                 elif ang<-30:
                         last='d'
                         keyboard.release('a')
                         keyboard.press('d')
+                        cv2.putText(image, 'RIGHT', (50,50), font, 1, (0,0,0), 3, cv2.LINE_AA)
                 else:
                     keyboard.release('d')
                     keyboard.release('a')
@@ -192,7 +203,5 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
 
-
 cap.release()
 cv2.destroyAllWindows()
-
